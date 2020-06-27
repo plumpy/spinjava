@@ -1,0 +1,12 @@
+apply from: "$rootDir/gradle/spek.gradle"
+
+dependencies {
+  api project(":keiko-core")
+  api "org.springframework.boot:spring-boot-autoconfigure"
+  api("com.netflix.spinnaker.kork:kork-core") {
+    exclude(module: "logback-classic")
+  }
+  api "com.netflix.eureka:eureka-client"
+
+  testImplementation project(":keiko-test-common")
+}

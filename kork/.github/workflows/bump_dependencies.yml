@@ -1,0 +1,20 @@
+name: Bump Dependencies
+
+on:
+  repository_dispatch:
+    types: [bump-dependencies]
+
+jobs:
+  bump-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: spinnaker/bumpdeps@master
+      with:
+        ref: ${{ github.event.client_payload.ref }}
+        key: korkVersion
+        repositories: clouddriver,echo,fiat,front50,gate,halyard,igor,keel,keiko,orca,rosco,swabbie
+        mavenRepositoryUrl: https://dl.bintray.com/spinnaker/spinnaker
+        groupId: com.netflix.spinnaker.kork
+        artifactId: kork-bom
+      env:
+        GITHUB_OAUTH: ${{ secrets.SPINNAKER_GITHUB_TOKEN }}

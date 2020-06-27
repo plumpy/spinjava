@@ -1,0 +1,8 @@
+apply plugin: "java-library"
+apply plugin: "groovy"
+
+dependencies {
+  api(project(":kork-core"))
+
+  api("org.spockframework:spock-core")
+}

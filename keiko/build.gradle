@@ -1,0 +1,38 @@
+plugins {
+  id("io.spinnaker.project").version("$spinnakerGradleVersion").apply(false)
+  id("nebula.kotlin").version("$kotlinVersion").apply(false)
+  id("org.jetbrains.kotlin.plugin.spring").version("$kotlinVersion").apply(false)
+  id("org.jetbrains.dokka").version("0.9.18").apply(false)
+}
+
+subprojects {
+  apply(plugin: "io.spinnaker.project")
+
+  if (korkVersion.endsWith('-SNAPSHOT')) {
+    repositories {
+      mavenLocal()
+    }
+  }
+  repositories {
+    jcenter()
+  }
+
+  group = "com.netflix.spinnaker.keiko"
+
+  apply plugin: "java-library"
+
+  dependencies {
+    implementation(platform("com.netflix.spinnaker.kork:kork-bom:$korkVersion"))
+    annotationProcessor(platform("com.netflix.spinnaker.kork:kork-bom:$korkVersion"))
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("org.slf4j:slf4j-api")
+    testRuntimeOnly("org.slf4j:slf4j-nop")
+  }
+
+  apply(from: "$rootDir/gradle/kotlin.gradle")
+  apply(from: "$rootDir/gradle/dokka.gradle")
+}
+
+apply(from: "$rootDir/gradle/ktlint-root.gradle")
+
+defaultTasks "build"

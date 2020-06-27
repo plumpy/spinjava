@@ -1,0 +1,51 @@
+apply plugin: 'io.spinnaker.package'
+
+ext {
+  springConfigLocation = System.getProperty('spring.config.additional-location', "${System.getProperty('user.home')}/.spinnaker/".toString())
+  springProfiles = System.getProperty('spring.profiles.active', "test,local")
+}
+
+run {
+  systemProperty('spring.config.additional-location', project.springConfigLocation)
+  systemProperty('spring.profiles.active', project.springProfiles)
+}
+mainClassName = 'com.netflix.spinnaker.fiat.Main'
+
+configurations.all {
+  exclude group: 'javax.servlet', module: 'servlet-api'
+  exclude group: "org.slf4j", module: "slf4j-log4j12"
+}
+
+dependencies {
+  implementation "com.squareup.retrofit:retrofit"
+  implementation "com.squareup.retrofit:converter-jackson"
+  implementation "com.squareup.okhttp:okhttp"
+  implementation "com.squareup.okhttp:okhttp-urlconnection"
+  implementation "com.squareup.okhttp:okhttp-apache"
+  implementation "com.jakewharton.retrofit:retrofit1-okhttp3-client"
+
+  implementation "org.springframework.boot:spring-boot-properties-migrator"
+  implementation "org.springframework.boot:spring-boot-starter-actuator"
+  implementation "org.springframework.boot:spring-boot-starter-web"
+  implementation "com.netflix.spinnaker.kork:kork-core"
+  implementation "com.netflix.spinnaker.kork:kork-plugins"
+  implementation "com.netflix.spinnaker.kork:kork-web"
+  implementation "com.netflix.spinnaker.kork:kork-secrets-aws"
+  implementation "com.netflix.spinnaker.kork:kork-secrets-gcp"
+  implementation "com.netflix.spinnaker.kork:kork-stackdriver"
+  implementation "com.netflix.spinnaker.kork:kork-swagger"
+  implementation "net.logstash.logback:logstash-logback-encoder"
+
+  implementation project(':fiat-core')
+  implementation project(':fiat-roles')
+
+  // Add each included authz provider as a runtime dependency
+  gradle.includedProviderProjects.each {
+    implementation project(it)
+  }
+
+  testImplementation "com.netflix.spinnaker.kork:kork-jedis"
+  testImplementation "com.netflix.spinnaker.kork:kork-jedis-test"
+}
+
+applicationName = 'fiat'

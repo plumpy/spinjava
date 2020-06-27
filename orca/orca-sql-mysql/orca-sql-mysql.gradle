@@ -1,0 +1,4 @@
+dependencies {
+  implementation(project(":orca-sql"))
+  runtimeOnly("mysql:mysql-connector-java")
+}

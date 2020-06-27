@@ -1,0 +1,97 @@
+ext {
+  springConfigLocation = System.getProperty('spring.config.additional-location', "${System.getProperty('user.home')}/.spinnaker/".toString())
+}
+
+apply plugin: 'io.spinnaker.package'
+
+run {
+  systemProperty('spring.config.additional-location', project.springConfigLocation)
+}
+
+mainClassName = 'com.netflix.spinnaker.igor.Main'
+
+test {
+  useJUnitPlatform()
+}
+
+
+dependencies {
+    implementation project(":igor-core")
+    implementation project(":igor-monitor-artifactory")
+    implementation project(":igor-monitor-plugins")
+    implementation project(":igor-monitor-travis")
+
+    implementation platform("com.netflix.spinnaker.kork:kork-bom:$korkVersion")
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor platform("com.netflix.spinnaker.kork:kork-bom:$korkVersion")
+    annotationProcessor "org.projectlombok:lombok"
+    testAnnotationProcessor platform("com.netflix.spinnaker.kork:kork-bom:$korkVersion")
+    testAnnotationProcessor "org.projectlombok:lombok"
+
+    implementation "org.springframework.boot:spring-boot-properties-migrator"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    implementation "javax.xml.bind:jaxb-api"
+    implementation "com.sun.xml.bind:jaxb-core:2.3.0.1"
+    implementation "com.sun.xml.bind:jaxb-impl:2.3.2"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.spockframework:spock-core"
+    testImplementation "org.spockframework:spock-spring"
+    testImplementation "org.springframework:spring-test"
+    testImplementation "org.hamcrest:hamcrest-core"
+    testRuntimeOnly "cglib:cglib-nodep"
+    testRuntimeOnly "org.objenesis:objenesis"
+    implementation "org.codehaus.groovy:groovy-all"
+
+    implementation "com.fasterxml.jackson.core:jackson-annotations"
+    implementation "com.fasterxml.jackson.core:jackson-core"
+    implementation "com.fasterxml.jackson.core:jackson-databind"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml"
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+
+    implementation "com.squareup.retrofit:retrofit"
+    implementation "com.squareup.retrofit:converter-jackson"
+    implementation "com.squareup.okhttp:okhttp"
+    implementation "com.squareup.okhttp:okhttp-urlconnection"
+    implementation "com.squareup.okhttp:okhttp-apache"
+    implementation "com.squareup.okhttp3:okhttp-sse"
+    implementation "com.jakewharton.retrofit:retrofit1-okhttp3-client:1.1.0"
+    implementation "com.netflix.spinnaker.fiat:fiat-api:$fiatVersion"
+    implementation "com.netflix.spinnaker.fiat:fiat-core:$fiatVersion"
+    implementation "org.springframework.security:spring-security-core"
+    implementation "org.springframework.security:spring-security-config"
+    implementation "org.springframework.security:spring-security-web"
+
+    implementation "com.amazonaws:aws-java-sdk"
+    implementation "com.google.apis:google-api-services-cloudbuild"
+    implementation "com.google.apis:google-api-services-storage"
+    implementation 'com.google.auth:google-auth-library-oauth2-http'
+    implementation "com.netflix.spinnaker.kork:kork-config"
+    implementation "com.netflix.spinnaker.kork:kork-core"
+    implementation "com.netflix.spinnaker.kork:kork-artifacts"
+    implementation "com.netflix.spinnaker.kork:kork-stackdriver"
+    implementation "com.netflix.spinnaker.kork:kork-web"
+    implementation "com.netflix.spinnaker.kork:kork-jedis"
+    implementation "com.netflix.spinnaker.kork:kork-telemetry"
+    implementation "com.netflix.spinnaker.kork:kork-secrets-aws"
+    implementation "com.netflix.spinnaker.kork:kork-secrets-gcp"
+    implementation "com.netflix.spinnaker.kork:kork-plugins"
+
+    implementation "com.netflix.eureka:eureka-client"
+    implementation "io.github.resilience4j:resilience4j-retry"
+
+    implementation "io.projectreactor:reactor-core"
+    implementation "com.google.code.gson:gson"
+    implementation "com.google.guava:guava"
+
+    testImplementation "com.squareup.okhttp:mockwebserver"
+    testImplementation "com.netflix.spinnaker.kork:kork-jedis-test"
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "org.assertj:assertj-core"
+
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "com.github.tomakehurst:wiremock-jre8:2.22.0"
+}

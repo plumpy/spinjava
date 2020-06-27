@@ -1,0 +1,14 @@
+dependencies{
+  implementation project(':gate-core')
+  // RetrySupport is in kork-exceptions and not kork-core!
+  implementation "com.netflix.spinnaker.fiat:fiat-api:$fiatVersion"
+  implementation "com.netflix.spinnaker.kork:kork-exceptions"
+  implementation "com.netflix.spinnaker.kork:kork-security"
+  implementation "com.netflix.spectator:spectator-api"
+  implementation 'org.springframework:spring-context'
+  implementation 'org.springframework.session:spring-session-core'
+  implementation 'org.springframework.boot:spring-boot-autoconfigure'
+
+  implementation "org.springframework.security.extensions:spring-security-saml2-core"
+  implementation "org.springframework.security.extensions:spring-security-saml-dsl-core"
+}

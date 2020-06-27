@@ -1,0 +1,23 @@
+['kork'].each { prj ->
+  String propName = "${prj}Composite"
+  String projectPath = "../$prj"
+  if (settings.ext.has(propName) && Boolean.parseBoolean(settings.ext.get(propName) as String)) {
+    includeBuild projectPath
+  }
+}
+
+enableFeaturePreview("VERSION_ORDERING_V2")
+
+include(
+  "keiko-core",
+  "keiko-mem",
+  "keiko-mem-spring",
+  "keiko-redis",
+  "keiko-redis-spring",
+  "keiko-spring",
+  "keiko-tck",
+  "keiko-test-common",
+  "keiko-sql"
+)
+
+rootProject.name = "keiko"

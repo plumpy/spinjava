@@ -1,0 +1,33 @@
+apply from: "$rootDir/gradle/spock.gradle"
+apply from: "$rootDir/gradle/kotlin.gradle"
+
+dependencies {
+  implementation(project(":orca-core"))
+  implementation(project(":orca-retrofit"))
+  implementation(project(":orca-front50"))
+  implementation(project(":orca-clouddriver"))
+
+  implementation("com.hubspot.jinjava:jinjava")
+  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+  implementation("com.jayway.jsonpath:json-path:2.2.0")
+  implementation("org.slf4j:slf4j-api")
+  implementation("org.springframework.boot:spring-boot-autoconfigure")
+  implementation("org.springframework:spring-context")
+  implementation("org.springframework:spring-web")
+  implementation("com.fasterxml.jackson.core:jackson-databind")
+  implementation("com.netflix.spectator:spectator-api")
+  implementation("com.netflix.frigga:frigga")
+  implementation("com.netflix.spinnaker.kork:kork-exceptions")
+  implementation("com.squareup.okhttp3:okhttp")
+  implementation("commons-codec:commons-codec")
+  implementation("javax.validation:validation-api")
+
+  compileOnly("org.projectlombok:lombok")
+  annotationProcessor("org.projectlombok:lombok")
+
+  testImplementation("org.slf4j:slf4j-simple")
+  testImplementation("org.spockframework:spock-unitils")
+  testImplementation("org.codehaus.groovy:groovy-json")
+  testImplementation("com.netflix.spinnaker.fiat:fiat-core:$fiatVersion")
+}

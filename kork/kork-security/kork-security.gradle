@@ -1,0 +1,18 @@
+apply plugin: "java-library"
+apply plugin: "groovy"
+apply from: "$rootDir/gradle/lombok.gradle"
+
+dependencies {
+  api(platform(project(":spinnaker-dependencies")))
+
+  api project(":kork-core")
+
+  api "org.springframework.security:spring-security-core"
+  api "com.fasterxml.jackson.core:jackson-annotations"
+
+  implementation "com.google.guava:guava"
+
+  testImplementation "org.spockframework:spock-core"
+  testRuntimeOnly "cglib:cglib-nodep"
+  testRuntimeOnly "org.objenesis:objenesis"
+}

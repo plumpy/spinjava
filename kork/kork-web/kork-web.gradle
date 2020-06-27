@@ -1,0 +1,41 @@
+apply plugin: "java-library"
+apply plugin: "groovy"
+
+sourceSets {
+  main {
+    java { srcDirs = [] }
+    groovy { srcDirs += ['src/main/java'] }
+  }
+}
+
+dependencies {
+  api(platform(project(":spinnaker-dependencies")))
+
+  api project(":kork-core")
+  api project(":kork-security")
+  api project(":kork-exceptions")
+  api "org.codehaus.groovy:groovy-all"
+  api "org.springframework.boot:spring-boot-starter-web"
+  api "org.springframework.boot:spring-boot-starter-security"
+  api "org.springframework.security:spring-security-core"
+  api "com.netflix.spectator:spectator-api"
+  api("com.netflix.spectator:spectator-web-spring") {
+    // IMPORTANT: spectator-web-spring is Spring Boot 1.x; but is code compat with Boot 2. Exclude the transitives
+    transitive = false
+  }
+  api "com.fasterxml.jackson.core:jackson-annotations"
+  api "com.squareup.okhttp:okhttp"
+  api "com.squareup.okhttp3:okhttp"
+  api "com.squareup.retrofit:retrofit"
+
+  implementation "com.google.guava:guava"
+
+  compileOnly "org.springframework.boot:spring-boot-starter-actuator"
+
+  testImplementation "org.spockframework:spock-core"
+  testImplementation "org.spockframework:spock-spring"
+  testImplementation "org.springframework.boot:spring-boot-starter-test"
+  testImplementation "com.netflix.spectator:spectator-reg-micrometer"
+  testRuntimeOnly "cglib:cglib-nodep"
+  testRuntimeOnly "org.objenesis:objenesis"
+}
