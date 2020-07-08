@@ -1,0 +1,228 @@
+name: Kork build
+
+on: [ pull_request ]
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx6g -Dorg.gradle.parallel=true
+
+jobs:
+  build_kork:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build kork
+      run: ./kork/gradlew -p kork -PenableCrossCompilerPlugin=true build
+  build_rosco:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build rosco
+      run: ./rosco/gradlew -p rosco -PenableCrossCompilerPlugin=true build
+  build_keiko:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build keiko
+      run: ./keiko/gradlew -p keiko -PenableCrossCompilerPlugin=true build
+  build_fiat:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build fiat
+      run: ./fiat/gradlew -p fiat -PenableCrossCompilerPlugin=true build
+  build_clouddriver:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build clouddriver
+      run: ./clouddriver/gradlew -p clouddriver -PenableCrossCompilerPlugin=true build
+  build_front50:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build front50
+      run: ./front50/gradlew -p front50 -PenableCrossCompilerPlugin=true build
+  build_echo:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build echo
+      run: ./echo/gradlew -p echo -PenableCrossCompilerPlugin=true build -x :echo-notifications:test
+  build_gate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build gate
+      run: ./gate/gradlew -p gate -PenableCrossCompilerPlugin=true build
+  build_igor:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build igor
+      run: ./igor/gradlew -p igor -PenableCrossCompilerPlugin=true build
+  build_orca:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build orca
+      run: ./orca/gradlew -p orca -PenableCrossCompilerPlugin=true build
+  build_kayenta:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Install Java 8 for cross-compilation support. Setting it up before
+    # Java 11 means it comes later in $PATH (because of how setup-java works)
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - uses: actions/cache@v2
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build kayenta
+      run: ./kayenta/gradlew -p kayenta -PenableCrossCompilerPlugin=true build
