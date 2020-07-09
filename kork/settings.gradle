@@ -72,3 +72,4 @@ def setBuildFile(project) {
 rootProject.children.forEach {
   setBuildFile(it)
 }
+includeBuild '../moniker'
