@@ -1,0 +1,18 @@
+name: Bump Dependencies
+
+on:
+  repository_dispatch:
+    types: [bump-dependencies]
+
+jobs:
+  bump-dependencies:
+    if: startsWith(github.repository, 'spinnaker/')
+    runs-on: ubuntu-latest
+    steps:
+    - uses: spinnaker/bumpdeps@master
+      with:
+        ref: ${{ github.event.client_payload.ref }}
+        key: fiatVersion
+        repositories: clouddriver,echo,front50,gate,halyard,igor,keel,orca
+      env:
+        GITHUB_OAUTH: ${{ secrets.SPINNAKER_GITHUB_TOKEN }}

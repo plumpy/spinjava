@@ -1,0 +1,101 @@
+apply plugin: 'io.spinnaker.package'
+
+ext {
+  springConfigLocation = System.getProperty('spring.config.additional-location', "${System.getProperty('user.home')}/.spinnaker/".toString())
+  springProfiles = System.getProperty('spring.profiles.active', "test,local")
+}
+
+run {
+  systemProperty('spring.config.additional-location', project.springConfigLocation)
+  systemProperty('spring.profiles.active', project.springProfiles)
+}
+mainClassName = 'com.netflix.spinnaker.gate.Main'
+
+repositories {
+  maven {
+    url 'https://repo.spring.io/libs-snapshot'
+  }
+}
+
+dependencies {
+  implementation project(":gate-api")
+  implementation project(":gate-core")
+  implementation project(":gate-proxy")
+  implementation project(":gate-plugins")
+  implementation project(":gate-integrations-gremlin")
+
+  implementation "com.squareup.retrofit:retrofit"
+  implementation "com.squareup.retrofit:converter-jackson"
+  implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
+  implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+
+  implementation "com.squareup.okhttp:okhttp"
+  implementation "com.squareup.okhttp:okhttp-urlconnection"
+  implementation "com.squareup.okhttp:okhttp-apache"
+
+  implementation "com.netflix.spinnaker.fiat:fiat-core:$fiatVersion"
+  implementation "com.netflix.spinnaker.fiat:fiat-api:$fiatVersion"
+
+  implementation "com.netflix.spinnaker.kork:kork-plugins"
+  implementation "com.netflix.spinnaker.kork:kork-web"
+  implementation "com.netflix.frigga:frigga"
+  implementation "redis.clients:jedis"
+
+  implementation 'commons-io:commons-io'
+  implementation 'org.springframework.session:spring-session-data-redis'
+  implementation "de.huxhorn.sulky:de.huxhorn.sulky.ulid"
+  implementation "com.jakewharton.retrofit:retrofit1-okhttp3-client:1.1.0"
+  implementation "org.apache.commons:commons-lang3"
+
+  implementation "org.springframework:spring-web"
+  implementation "org.springframework.boot:spring-boot-starter-actuator"
+  implementation "org.springframework.boot:spring-boot-starter-aop"
+  implementation "io.github.resilience4j:resilience4j-spring-boot2"
+
+  implementation "com.graphql-java-kickstart:graphql-spring-boot-starter:7.0.1"
+  implementation "com.graphql-java-kickstart:graphql-java-tools:6.0.2"
+
+  implementation "io.springfox:springfox-swagger2"
+
+  runtimeOnly "com.netflix.spinnaker.kork:kork-runtime"
+
+  testImplementation "com.graphql-java-kickstart:graphql-spring-boot-starter-test:7.0.1"
+
+  testImplementation project(":gate-ldap") // TODO: Move system tests to own module
+  testImplementation project(":gate-basic")
+  testImplementation "com.squareup.okhttp:mockwebserver"
+
+  testImplementation "com.squareup.retrofit:retrofit-mock"
+  testImplementation "org.springframework.security:spring-security-test"
+  testImplementation "org.springframework.security:spring-security-ldap"
+  testImplementation "org.springframework.security:spring-security-oauth2-jose"
+  testImplementation "com.unboundid:unboundid-ldapsdk"
+  testImplementation "com.netflix.spinnaker.kork:kork-jedis-test"
+
+  // Add each included authz provider as a runtime dependency
+  gradle.includedProviderProjects.each {
+    runtime project(it)
+  }
+}
+
+configurations.all {
+  exclude group: 'javax.servlet', module: 'servlet-api'
+  exclude group: "org.slf4j", module: "slf4j-log4j12"
+}
+
+test {
+  //The Implementation-Version is set in the MANIFEST.MF for the JAR produced via testing so that
+  //assertions can be made against the version (see gate-plugins-test, for example).
+  jar {
+    manifest {
+      String implementationVersion = getAttributes()["Implementation-Version"]
+      if (implementationVersion == null
+        || implementationVersion.isEmpty()
+        || implementationVersion == "undefined") {
+        attributes(
+          'Implementation-Version': '1.0.0'
+        )
+      }
+    }
+  }
+}

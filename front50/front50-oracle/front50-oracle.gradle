@@ -1,0 +1,13 @@
+dependencies {
+  implementation project(":front50-core")
+
+  implementation "com.github.ben-manes.caffeine:guava"
+  implementation "com.netflix.spinnaker.kork:kork-core"
+  implementation "com.oracle.oci.sdk:oci-java-sdk-objectstorage:1.5.2"
+  implementation "com.sun.jersey:jersey-client"
+  implementation "org.springframework.boot:spring-boot-autoconfigure"
+  implementation "org.springframework.boot:spring-boot-starter-actuator"
+  implementation "org.springframework.boot:spring-boot-starter-web"
+
+  testImplementation project(":front50-test")
+}

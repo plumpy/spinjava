@@ -1,0 +1,18 @@
+server:
+  port: 7003
+
+redis:
+  connection: ${services.redis.baseUrl:redis://localhost:6379}
+
+okHttpClient:
+  retries:
+    maxElapsedBackoffMs: 5000
+
+endpoints:
+  health:
+    sensitive: false
+
+# For options, see com.netflix.spinnaker.fiat.config.FiatServerConfigurationProperties
+
+logging:
+  config: classpath:logback-defaults.xml

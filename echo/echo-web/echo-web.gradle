@@ -1,0 +1,85 @@
+/*
+ * Copyright 2015 Netflix, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ext {
+  springConfigLocation = System.getProperty('spring.config.additional-location', "${System.getProperty('user.home')}/.spinnaker/".toString())
+  springProfiles = System.getProperty('spring.profiles.active', "test,local")
+}
+
+apply plugin: 'io.spinnaker.package'
+
+mainClassName = 'com.netflix.spinnaker.echo.Application'
+
+dependencies {
+    implementation project(':echo-artifacts')
+    implementation project(':echo-core')
+    implementation project(':echo-model')
+    implementation project(':echo-notifications')
+    implementation project(':echo-pipelinetriggers')
+    implementation project(':echo-scheduler')
+    implementation project(':echo-rest')
+    implementation project(':echo-webhooks')
+    implementation project(':echo-pubsub-core')
+    implementation project(':echo-pubsub-aws')
+    implementation project(':echo-pubsub-google')
+    implementation project(':echo-telemetry')
+    implementation "com.netflix.spinnaker.fiat:fiat-api:$fiatVersion"
+    implementation "com.netflix.spinnaker.fiat:fiat-core:$fiatVersion"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "com.netflix.spinnaker.kork:kork-config"
+    implementation "com.netflix.spinnaker.kork:kork-web"
+    implementation "com.squareup.retrofit:retrofit"
+    implementation "com.squareup.retrofit:converter-jackson"
+    implementation "com.jakewharton.retrofit:retrofit1-okhttp3-client:1.1.0"
+    implementation "com.fasterxml.jackson.core:jackson-databind"
+    implementation "com.netflix.spectator:spectator-api"
+    implementation 'net.redhogs.cronparser:cron-parser-core:2.8'
+    implementation "org.springframework.data:spring-data-rest-webmvc"
+    implementation "org.springframework:spring-context-support"
+    implementation("org.quartz-scheduler:quartz") {
+      exclude group: 'com.zaxxer', module: 'HikariCP-java7'
+    }
+
+    runtimeOnly "com.netflix.spinnaker.kork:kork-runtime"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.spockframework:spock-spring"
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+}
+
+run {
+  systemProperty('spring.config.additional-location', project.springConfigLocation)
+  systemProperty('spring.profiles.active', project.springProfiles)
+}
+
+test {
+  //The Implementation-Version is set in the MANIFEST.MF for the JAR produced via testing so that
+  //assertions can be made against the version (see echo-plugins-test, for example).
+  jar {
+    manifest {
+      String implementationVersion = getAttributes()["Implementation-Version"]
+      if (implementationVersion == null
+        || implementationVersion.isEmpty()
+        || implementationVersion == "undefined") {
+        attributes(
+          'Implementation-Version': '1.0.0'
+        )
+      }
+    }
+  }
+}

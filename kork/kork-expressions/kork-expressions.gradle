@@ -1,0 +1,22 @@
+apply plugin: "java-library"
+apply from: "$rootDir/gradle/lombok.gradle"
+apply from: "$rootDir/gradle/kotlin.gradle"
+
+test {
+  useJUnitPlatform()
+}
+
+dependencies {
+  api(platform(project(":spinnaker-dependencies")))
+
+  api project(":kork-plugins-api")
+  api project(":kork-exceptions")
+  api "com.fasterxml.jackson.core:jackson-databind"
+  api "org.springframework:spring-context"
+  api "org.slf4j:slf4j-api"
+
+  testImplementation "org.assertj:assertj-core"
+  testImplementation "org.junit.jupiter:junit-jupiter-api"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+  testRuntimeOnly "org.slf4j:slf4j-simple"
+}

@@ -1,0 +1,60 @@
+apply plugin: 'io.spinnaker.package'
+
+ext {
+  springConfigLocation = System.getProperty('spring.config.additional-location', "${System.getProperty('user.home')}/.spinnaker/".toString())
+}
+
+run {
+  systemProperty('spring.config.additional-location', project.springConfigLocation)
+}
+mainClassName = 'com.netflix.spinnaker.rosco.Main'
+
+configurations.all {
+  exclude group: 'javax.servlet', module: 'servlet-api'
+  exclude group: "org.slf4j", module: "slf4j-log4j12"
+}
+
+dependencies {
+  compile project(":rosco-core")
+  compile project(":rosco-manifests")
+  implementation "com.netflix.spinnaker.kork:kork-web"
+  implementation "io.swagger:swagger-annotations"
+
+  implementation "org.codehaus.groovy:groovy-all"
+  implementation "com.netflix.spinnaker.kork:kork-artifacts"
+  implementation "org.springframework.boot:spring-boot-starter-web"
+
+  runtimeOnly "com.netflix.spinnaker.kork:kork-runtime"
+
+  testImplementation "org.spockframework:spock-core"
+  testImplementation "org.objenesis:objenesis"
+}
+
+ospackage {
+  from('../halconfig/packer') {
+    into '/opt/rosco/config/packer'
+  }
+
+  configurationFile('/opt/rosco/config/rosco.yml')
+  configurationFile('/opt/rosco/config/packer/alicloud.json')
+  configurationFile('/opt/rosco/config/packer/aws-chroot.json')
+  configurationFile('/opt/rosco/config/packer/aws-ebs.json')
+  configurationFile('/opt/rosco/config/packer/azure-linux.json')
+  configurationFile('/opt/rosco/config/packer/gce.json')
+  configurationFile('/opt/rosco/config/packer/huaweicloud.json')
+  configurationFile('/opt/rosco/config/packer/oci.json')
+  configurationFile('/opt/rosco/config/packer/tencentcloud.json')
+  configurationFile('/opt/rosco/config/packer/install_packages.sh')
+
+  from('../docker') {
+    into "/opt/${project.applicationName}/docker"
+  }
+}
+
+buildDeb {
+  requires('unzip')
+}
+
+buildRpm {
+  requires('unzip')
+}

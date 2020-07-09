@@ -1,0 +1,41 @@
+/*
+ * Copyright 2015 Netflix, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+dependencies {
+  implementation project(':echo-core')
+  implementation project(':echo-model')
+  implementation project(':echo-pipelinetriggers')
+
+  implementation "com.squareup.retrofit:retrofit"
+  implementation "com.squareup.retrofit:converter-jackson"
+  implementation "com.squareup.okhttp:okhttp"
+  implementation "com.squareup.okhttp:okhttp-urlconnection"
+  implementation "com.squareup.okhttp:okhttp-apache"
+
+  implementation "com.netflix.eureka:eureka-client"
+  implementation "com.netflix.spectator:spectator-api"
+  implementation "com.netflix.spinnaker.kork:kork-artifacts"
+  implementation "com.netflix.spinnaker.kork:kork-sql"
+
+  if (!rootProject.hasProperty("excludeSqlDrivers")) {
+    runtimeOnly "mysql:mysql-connector-java"
+  }
+
+  implementation "org.springframework:spring-context-support"
+  implementation ("org.quartz-scheduler:quartz") {
+    exclude group: 'com.zaxxer', module: 'HikariCP-java7'
+  }
+}
